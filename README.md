@@ -8,10 +8,15 @@ t = Tesseract.new(opts)
 ```
 
 Options:
-  blob\n
-  src || source || image\n
-  strip\n
-  lang || language\n
+
+  blob
+
+  src || source || image
+
+  strip
+
+  lang || language
+
   editor
 
 Evaluate the whole image:
