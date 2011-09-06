@@ -1,6 +1,5 @@
 require 'RMagick'
 require 'simple_tesseract_ext'
-require 'stringio'
 
 class Tesseract
   attr_reader :src, :blob
