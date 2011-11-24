@@ -7,6 +7,10 @@
 
 void read_tiff_image(TIFF* tif, IMAGE* image);
 
+#ifdef _NEW_TESSERACT
+using namespace tesseract;
+#endif
+
 extern "C" {
   VALUE rb_cTesseract;
 
@@ -24,10 +28,17 @@ extern "C" {
     int bytes_per_line = check_legal_image_size(img.get_xsize(),
         img.get_ysize(), img.get_bpp());
 
+    char *text;
+#if _NEW_TESSERACT
+    TessBaseAPI api; api.Init(NULL, lang);
+    text = api.TesseractRect(img.get_buffer(), img.get_bpp()/8,
+        bytes_per_line, x, y, width, height);
+#else
     TessBaseAPI::InitWithLanguage(NULL, NULL, lang, NULL, false, 0, NULL);
-    char *text = TessBaseAPI::TesseractRect(img.get_buffer(), img.get_bpp()/8,
+    text = TessBaseAPI::TesseractRect(img.get_buffer(), img.get_bpp()/8,
         bytes_per_line, x, y, width, height);
     TessBaseAPI::End();
+#endif
     TIFFClose(tif);
 
     return rb_str_new2(text);
